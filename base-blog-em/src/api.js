@@ -6,10 +6,16 @@ export async function fetchPosts(pageNum = 1) {
 }
 
 export async function fetchComments(postId) {
-  const response = await fetch(
+  try{
+    const response = await fetch(
     `https://jsonplaceholder.typicode.com/comments?postId=${postId}`
   );
+  
   return response.json();
+  } catch {
+    throw new Error('An error has been occured')
+  }
+  
 }
 
 export async function deletePost(postId) {
