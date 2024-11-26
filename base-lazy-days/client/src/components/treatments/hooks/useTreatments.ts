@@ -1,23 +1,24 @@
-import type { Treatment } from "@shared/types";
+import type { Treatment } from '@shared/types';
 
-import { useQuery } from "@tanstack/react-query";
+import { useQuery } from '@tanstack/react-query';
 
-import { axiosInstance } from "@/axiosInstance";
-import { queryKeys } from "@/react-query/constants";
+import { axiosInstance } from '@/axiosInstance';
+import { queryKeys } from '@/react-query/constants';
 
 // for when we need a query function for useQuery
 async function getTreatments(): Promise<Treatment[]> {
   const { data } = await axiosInstance.get('/treatments');
 
-  
-return data;
+  return data;
 }
 
 export function useTreatments(): Treatment[] {
-  const {data}=useQuery({
-queryKey:[queryKeys.treatments],
-queryFn:getTreatments
-  })
+  const fallback: Treatment[] = [];
 
-  return data
+  const { data = fallback } = useQuery({
+    queryKey: [queryKeys.treatments],
+    queryFn: getTreatments,
+  });
+
+  return data;
 }
