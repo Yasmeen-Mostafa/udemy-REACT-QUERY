@@ -1,5 +1,9 @@
 import { toast } from "@/components/app/toast";
+import { QueryClient } from "@tanstack/react-query";
 
+
+
+export const queryClient=new QueryClient()
 // function errorHandler(errorMsg: string) {
 //   // https://chakra-ui.com/docs/components/toast#preventing-duplicate-toast
 //   // one message per page load, not one message per query

@@ -1,67 +1,128 @@
-const vitest = require("eslint-plugin-vitest");
-
 module.exports = {
-  root: true,
-  env: { browser: true, es2020: true },
-  settings: {
-    "import/resolver": {
-      node: {
-        extensions: [".js", ".jsx", ".ts", ".tsx"],
-        paths: ["src"],
-      },
-    },
-  },
-  extends: [
-    "eslint:recommended",
-    "plugin:react/recommended",
-    "plugin:react/jsx-runtime",
-    "plugin:react-hooks/recommended",
-    "plugin:@typescript-eslint/recommended",
-    "plugin:jsx-a11y/recommended",
-    "plugin:vitest/recommended",
-    "plugin:testing-library/react",
-    // "plugin:@tanstack/eslint-plugin-query/recommended",
-  ],
-  ignorePatterns: ["dist", ".eslintrc.cjs"],
-  parser: "@typescript-eslint/parser",
-  parserOptions: { ecmaVersion: "latest", sourceType: "module" },
-  settings: { react: { version: "18.2" } },
-  plugins: ["react-refresh", "simple-import-sort"],
+  extends: ['next/core-web-vitals', 'plugin:@typescript-eslint/recommended', 'plugin:import/recommended', 'prettier'],
   rules: {
-    "react-refresh/only-export-components": [
-      "warn",
-      { allowConstantExport: true },
-    ],
-    // we're using TypeScript here, not propTypes!
-    "react/prop-types": "off",
-
-    // obscure error that we don't need
-    "react/display-name": "off",
-
-    // to avoid "no-unused-vars" warnings in function type declarations
-    "no-unused-vars": "off",
-    "@typescript-eslint/no-unused-vars": "warn",
-
-    // imports
-    "import/prefer-default-export": 0,
-    "import/no-anonymous-default-export": 0,
-
-    // sort alias imports that start with `@` separately from modules that start with `@`
-    "simple-import-sort/imports": [
-      "warn",
+    'jsx-a11y/alt-text': 'off',
+    'react/display-name': 'off',
+    'react/no-children-prop': 'off',
+    '@next/next/no-img-element': 'off',
+    '@next/next/no-page-custom-font': 'off',
+    '@typescript-eslint/consistent-type-imports': 'error',
+    '@typescript-eslint/ban-ts-comment': 'off',
+    '@typescript-eslint/no-explicit-any': 'off',
+    '@typescript-eslint/no-unused-vars': 'error',
+    '@typescript-eslint/no-non-null-assertion': 'off',
+    'lines-around-comment': [
+      'error',
       {
-        groups: [["^\\u0000"], ["^@?\\w"], ["^@src", "^@shared"], ["^\\."]],
-      },
+        beforeBlockComment: true,
+        beforeLineComment: true,
+        allowBlockStart: true,
+        allowObjectStart: true,
+        allowArrayStart: true
+      }
     ],
-    "simple-import-sort/exports": "warn",
-    "sort-imports": "off",
-    "import/order": "off",
-
-    // eliminate distracting red squiggles while writing tests
-    "vitest/expect-expect": "off",
+    'padding-line-between-statements': [
+      'error',
+      {
+        blankLine: 'any',
+        prev: 'export',
+        next: 'export'
+      },
+      {
+        blankLine: 'always',
+        prev: ['const', 'let', 'var'],
+        next: '*'
+      },
+      {
+        blankLine: 'any',
+        prev: ['const', 'let', 'var'],
+        next: ['const', 'let', 'var']
+      },
+      {
+        blankLine: 'always',
+        prev: '*',
+        next: ['function', 'multiline-const', 'multiline-block-like']
+      },
+      {
+        blankLine: 'always',
+        prev: ['function', 'multiline-const', 'multiline-block-like'],
+        next: '*'
+      }
+    ],
+    'newline-before-return': 'error',
+    'import/newline-after-import': [
+      'error',
+      {
+        count: 1
+      }
+    ],
+    'import/order': [
+      'error',
+      {
+        groups: ['builtin', 'external', ['internal', 'parent', 'sibling', 'index'], ['object', 'unknown']],
+        pathGroups: [
+          {
+            pattern: 'react',
+            group: 'external',
+            position: 'before'
+          },
+          {
+            pattern: 'next/**',
+            group: 'external',
+            position: 'before'
+          },
+          {
+            pattern: '~/**',
+            group: 'external',
+            position: 'before'
+          },
+          {
+            pattern: '@/**',
+            group: 'internal'
+          }
+        ],
+        pathGroupsExcludedImportTypes: ['react', 'type'],
+        'newlines-between': 'always-and-inside-groups'
+      }
+    ],
+    '@typescript-eslint/ban-types': [
+      'error',
+      {
+        extendDefaults: true,
+        types: {
+          Function: 'Use a specific function type instead',
+          Object: 'Use object instead',
+          Boolean: 'Use boolean instead',
+          Number: 'Use number instead',
+          String: 'Use string instead',
+          Symbol: 'Use symbol instead',
+          any: false,
+          '{}': false
+        }
+      }
+    ]
   },
-  // don't flag vitest globals like `describe` and `test`
-  globals: {
-    ...vitest.environments.env.globals,
+  settings: {
+    react: {
+      version: 'detect'
+    },
+    'import/parsers': {
+      '@typescript-eslint/parser': ['.ts', '.tsx']
+    },
+    'import/resolver': {
+      node: {},
+      typescript: {
+        project: './tsconfig.json'
+      }
+    }
   },
-};
+  overrides: [
+    {
+      files: ['*.ts', '*.tsx', 'src/iconify-bundle/*'],
+      rules: {
+        '@typescript-eslint/explicit-module-boundary-types': 'off',
+        '@typescript-eslint/no-var-requires': 'off'
+      }
+    }
+  ]
+}
